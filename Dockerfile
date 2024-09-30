@@ -29,4 +29,5 @@ COPY src ./src
 
 ENTRYPOINT ["/bin/bash", "-c", "source .venv/bin/activate && exec $0 $@"]
 
+# Run the application. Train the model.
 CMD ["python", "src/train.py"]
