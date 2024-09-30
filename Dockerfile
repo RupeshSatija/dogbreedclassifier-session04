@@ -26,18 +26,25 @@ COPY pyproject.toml uv.lock ./
 # Create a virtual environment and install dependencies
 RUN uv venv && \
     . .venv/bin/activate && \
-    uv pip install . && \
-    uv pip install torch==2.4.0+cpu \
-    torchvision==0.19.0+cpu \
-    --index-url https://download.pytorch.org/whl/cpu \
-    lightning && \
-    rm -rf /root/.cache/pip
+    uv pip install -e . && \
+    uv pip install --upgrade pip
+
+# RUN uv venv && \
+#     . .venv/bin/activate && \
+#     uv pip install . && \
+#     # uv pip install torch==2.4.0 \
+#     # torchvision==0.19.0 \
+#     # # --index-url https://download.pytorch.org/whl/cpu \
+#     # lightning && \
+#     rm -rf /root/.cache/pip
     
 
 # Copy the rest of the application code
 COPY src ./src
 
 # Declare volumes
-VOLUME ["/app/samples", "/app/predictions", "/app/data"]
+# VOLUME ["/app/samples", "/app/predictions", "/app/data"]
 
-CMD ["python", "train.py"]
+ENTRYPOINT ["/bin/bash", "-c", "source .venv/bin/activate && exec $0 $@"]
+
+CMD ["python", "src/train.py"]
