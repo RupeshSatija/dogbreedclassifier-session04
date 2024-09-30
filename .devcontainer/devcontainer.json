@@ -1,15 +1,9 @@
 {
-    "name": "DogBreed Classifier",
-    "dockerFile": "../Dockerfile",
-    "context": "..",
-    "runArgs": [
-        "--gpus", "all"
-    ],
-    "mounts": [
-        "source=${localWorkspaceFolder}/samples,target=/app/samples,type=bind,consistency=cached",
-        "source=${localWorkspaceFolder}/predictions,target=/app/predictions,type=bind,consistency=cached",
-        "source=${localWorkspaceFolder}/data,target=/app/data,type=bind,consistency=cached"
-    ],
+    "name": "Dog breed Classifier",
+    "build": {
+        "dockerfile": "../Dockerfile",
+        "context": ".."
+    },
     "customizations": {
         "vscode": {
             "extensions": [
@@ -18,9 +12,17 @@
             ],
             "settings": {
                 "python.defaultInterpreterPath": "/app/.venv/bin/python",
-                "python.pythonPath": "/app/.venv/bin/python"
+                "python.linting.enabled": true,
+                "python.linting.pylintEnabled": true,
+                "python.formatting.provider": "black",
+                "editor.formatOnSave": true
             }
         }
     },
-    "postCreateCommand": ". /app/.venv/bin/activate && pip install -e ."
+    "forwardPorts": [],
+    "postCreateCommand": "uv pip install -e .",
+    "remoteUser": "root",
+    "mounts": [
+        "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached"
+    ]
 }
